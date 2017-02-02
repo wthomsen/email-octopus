@@ -1,0 +1,30 @@
+{
+  "author": {
+    "name": "Will Thomsen",
+    "email": "will@wiltho.com",
+    "url": "https://www.wiltho.com"
+  },
+  "name": "email-octopus",
+  "description": "Unofficial API wrapper and campaign automater for Email Octopus.",
+  "version": "0.0.1",
+  "homepage": "http://github.com/wthomsen/email-octopus",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:wthomsen/email-octopus.git"
+  },
+  "dependencies": {
+    "bluebird": "^3.4.7",
+    "lodash": "^4.17.4",
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1"
+  },
+  "devDependencies": {},
+  "contributors": [
+    {
+      "name": "Will Thomsen",
+      "email": "will@wiltho.com",
+      "url": "https://www.wiltho.com"
+    }
+  ]
+}
