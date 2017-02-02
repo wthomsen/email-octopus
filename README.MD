@@ -9,11 +9,11 @@ It also includes methods to automatically generate campaigns, which is currently
 
 ## Example Code
 
-    var EmailOctopus = require('email-octopus);
+    var eo = require('email-octopus);
     
     var username = 'username';
     var password = 'password';
-    var emailOctopus = new EmailOctopus(username, password);
+    var emailOctopus = new eo.EmailOctopus(username, password);
     
     var campaignOptions = {
       name: 'My First Automated Campaign',
