@@ -65,6 +65,7 @@ For full documentation with parameter specs, see the source file or the EmailOct
 * lists.create(options)
 * lists.update(options)
 * lists.delete(listId)
+* lists.find(list) - Helper function to find a list given a list object (e.g., `{name: 'My Precious List'}`)
 
 #### Contacts
 
@@ -72,11 +73,13 @@ For full documentation with parameter specs, see the source file or the EmailOct
 * lists.contacts.create(listId, options)
 * lists.contacts.update(listId, contactId, options)
 * lists.contacts.delete(listId, contactId)
+* lists.contacts.find(listId, contact) - Helper function to find a contact given a listId and a contact object (e.g., `{email_address: 'john@doe.com'}`)
 
 ### Campaigns
 
 * campaigns.get([campaignId], [options])
 * campaigns.create(options, html)
+* campaigns.find(campaign) - Helper function to find a campaign given a campaign object (e.g., `{subject: 'My Catchy Subject'}`)
 
 #### Reports
 
