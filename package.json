@@ -5,8 +5,8 @@
     "url": "https://www.wiltho.com"
   },
   "name": "email-octopus",
-  "description": "Unofficial API wrapper and campaign automater for Email Octopus.",
-  "version": "1.1.1",
+  "description": "Unofficial API wrapper and campaign automater for EmailOctopus.",
+  "version": "1.1.2",
   "homepage": "http://github.com/wthomsen/email-octopus",
   "license": "MIT",
   "repository": {
