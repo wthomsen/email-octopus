@@ -34,7 +34,7 @@
      * @param {string} path
      * @param {string} method
      * @param {Object} [options]
-     * @returns {*}
+     * @returns {Promise}
      * @private
      */
     EmailOctopus.prototype._apiRequest = function (path, method, options) {
@@ -67,7 +67,7 @@
      * @param {Object} [options]
      * @param {number} [options.limit=100]
      * @param {number} [options.page=1]
-     * @returns {*}
+     * @returns {Promise}
      */
     Campaigns.prototype.get = function (campaignId, options) {
       var _this = this;
@@ -87,7 +87,7 @@
      * @param {bool} [options.linkClickTrackingEnabled] - Whether to track link clicks
      * @param {bool} [options.toPersonalisationEnabled] - Whether to enable personalisation
      * @param {string} bodyHtml - the entire html of the email
-     * @returns {*}
+     * @returns {Promise}
      */
     Campaigns.prototype.create = function (options, bodyHtml) {
       var _this = this;
@@ -110,7 +110,7 @@
     /**
      * Mimic the first step of creating a campaign (https://emailoctopus.com/campaigns/setup)
      * @param {Object} [options] - The options associated with the campaign
-     * @returns {*}
+     * @returns {Promise}
      * @private
      */
     Campaigns.prototype._setup = function (options) {
@@ -167,7 +167,7 @@
     /**
      * Mimic campaign template selection (https://emailoctopus.com/campaigns/CAMPAIGN_ID/template)
      * @param {string} campaignId
-     * @returns {*}
+     * @returns {Promise}
      * @private
      */
     Campaigns.prototype._selectTemplate = function (campaignId) {
@@ -193,7 +193,7 @@
      * Mimic campaign design (https://emailoctopus.com/campaigns/CAMPAIGN_ID/design)
      * @param {string} campaignId
      * @param {string} bodyHtml
-     * @returns {*}
+     * @returns {Promise}
      * @private
      */
     Campaigns.prototype._design = function (campaignId, bodyHtml) {
@@ -216,6 +216,33 @@
           });
     };
 
+    /**
+     * Finds and returns the first matching campaign from a given list
+     * @param {Object} campaign - An object representing the campaign to search for
+     * @param {string} [campaign.name]
+     * @param {string} [campaign.subject]
+     * @param {number} [_page=1] - The page to start searching on
+     * @returns {Promise}
+     * @resolves {null|Object} - A nullable object containing the campaign (if found)
+     */
+    Campaigns.prototype.find = function (campaign, _page) {
+      var _this = this;
+      var page = _page || 1;
+      var options = {
+        limit: 100,
+        page: page
+      };
+
+      return _this.get(undefined, options).then(function (response) {
+        var campaigns = response.data;
+        var foundCampaign = _.find(campaigns, campaign);
+
+        return foundCampaign ? foundCampaign :
+            _.get(response, 'paging.next') ? _this.find(undefined, page + 1) :
+            null;
+      });
+    };
+
     return Campaigns;
   })();
 
@@ -228,11 +255,11 @@
      * https://emailoctopus.com/api-documentation/lists/get-contact or
      * https://emailoctopus.com/api-documentation/lists/get-all-contacts
      * @param {string} listId
-     * @param {string} [contactId]
+     * @param {string|undefined} [contactId]
      * @param {Object} [options]
      * @param {number} [options.limit=100]
      * @param {number} [options.page=1]
-     * @returns {*}
+     * @returns {Promise}
      */
     Contacts.prototype.get = function (listId, contactId, options) {
       var _this = this;
@@ -249,7 +276,7 @@
      * @param {string} [options.first_name] - The first name of the contact
      * @param {string} [options.last_name] - The last name of the contact
      * @param {bool} [options.subscribed=true] - The initial subscribed status of the contact
-     * @returns {*}
+     * @returns {Promise}
      */
     Contacts.prototype.create = function (listId, options) {
       var _this = this;
@@ -267,7 +294,7 @@
      * @param {string} [options.first_name] - The new first name for the contact
      * @param {string} [options.last_name] - The new last name for the contact
      * @param {bool} [options.subscribed] - The new subscribed status for the contact
-     * @returns {*}
+     * @returns {Promise}
      */
     Contacts.prototype.update = function (listId, contactId, options) {
       var _this = this;
@@ -280,13 +307,42 @@
      * https://emailoctopus.com/api-documentation/lists/delete-contact
      * @param {string} listId
      * @param {string} contactId
-     * @returns {*}
+     * @returns {Promise}
      */
     Contacts.prototype['delete'] = function (listId, contactId) {
       var _this = this;
       var path = '/lists/' + listId + '/contacts' + contactId;
 
       return _this.master._apiRequest(path, 'DELETE');
+    };
+
+    /**
+     * Finds and returns the first matching contact from a given list
+     * @param {string} listId
+     * @param {Object} contact - An object representing the contact to search for
+     * @param {string} [contact.email_address]
+     * @param {string} [contact.first_name]
+     * @param {string} [contact.last_name]
+     * @param {number} [_page=1] - The page to start searching on
+     * @returns {Promise}
+     * @resolves {null|Object} - A nullable object containing the contact (if found)
+     */
+    Contacts.prototype.find = function (listId, contact, _page) {
+      var _this = this;
+      var page = _page || 1;
+      var options = {
+        limit: 100,
+        page: page
+      };
+
+      return _this.get(listId, undefined, options).then(function (response) {
+        var contacts = response.data;
+        var foundContact = _.find(contacts, contact);
+
+        return foundContact ? foundContact :
+            _.get(response, 'paging.next') ? _this.find(listId, contact, page + 1) :
+            null;
+      });
     };
 
     return Contacts;
@@ -301,11 +357,11 @@
     /**
      * https://emailoctopus.com/api-documentation/lists/get or
      * https://emailoctopus.com/api-documentation/lists/get-all
-     * @param {string} [listId]
+     * @param {string|undefined} [listId]
      * @param {Object} [options]
      * @param {number} [options.limit=100] - Number of lists to return
      * @param {number} [options.page=1] - Page to return records from
-     * @returns {*}
+     * @returns {Promise}
      */
     Lists.prototype.get = function (listId, options) {
       var _this = this;
@@ -318,7 +374,7 @@
      * https://emailoctopus.com/api-documentation/lists/create
      * @param {Object} options
      * @param {string} options.name - The name of the new list
-     * @returns {*}
+     * @returns {Promise}
      */
     Lists.prototype.create = function (options) {
       var _this = this;
@@ -332,7 +388,7 @@
      * @param {string} listId
      * @param {Object} options
      * @param {Object} options.name - The new name for the list
-     * @returns {*}
+     * @returns {Promise}
      */
     Lists.prototype.update = function (listId, options) {
       var _this = this;
@@ -344,13 +400,40 @@
     /**
      * https://emailoctopus.com/api-documentation/lists/delete
      * @param {string} listId - The id of the list to delete
-     * @returns {*}
+     * @returns {Promise}
      */
     Lists.prototype['delete'] = function (listId) {
       var _this = this;
       var path = '/lists/' + listId;
 
       return _this.master._apiRequest(path, 'DELETE');
+    };
+
+
+    /**
+     * Finds and returns the first matching contact from a given list
+     * @param {Object} list - An object representing the list to search for
+     * @param {string} [list.name] - The name of the list to find
+     * @param {number} [_page=1] - The page to start searching on
+     * @returns {Promise}
+     * @resolves {null|Object} - A nullable object containing the list (if found)
+     */
+    Lists.prototype.find = function (list, _page) {
+      var _this = this;
+      var page = _page || 1;
+      var options = {
+        limit: 100,
+        page: page
+      };
+
+      return _this.get(undefined, options).then(function (response) {
+        var lists = response.data;
+        var foundList = _.find(lists, list);
+
+        return foundList ? foundList :
+            _.get(response, 'paging.next') ? _this.find(undefined, page + 1) :
+            null;
+      });
     };
 
     return Lists;
@@ -384,7 +467,7 @@
        * @param {Object} [options]
        * @param {number} [options.limit=100]
        * @param {number} [options.page=1]
-       * @returns {*}
+       * @returns {Promise}
        */
       Reports.prototype[_.camelCase(reportType)] = function (campaignId, options) {
         var _this = this;
@@ -404,7 +487,7 @@
 
     /**
      * Mimic sign-in process on Email Octopus website
-     * @returns {*}
+     * @returns {Promise}
      * @private
      */
     Website.prototype._signIn = function () {
@@ -439,7 +522,7 @@
 
     /**
      * Mimic sign-out process on Email Octopus website
-     * @returns {*}
+     * @returns {Promise}
      * @private
      */
     Website.prototype._signOut = function () {
@@ -456,7 +539,7 @@
      * Fetch the token hidden input value on an Email Octopus html form
      * @param {string} uri - The uri of the Email Octopus form
      * @param {string} tokenInputName - The name of the hidden input containing the token
-     * @returns {*}
+     * @returns {Promise}
      * @private
      */
     Website.prototype._getPageToken = function (uri, tokenInputName) {
