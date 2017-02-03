@@ -1,6 +1,6 @@
-# Unofficial Email Octopus API Wrapper
+# Unofficial EmailOctopus API Wrapper
 
-An unofficial promise-based wrapper for the Email Octopus API. 
+An unofficial promise-based wrapper for the EmailOctopus API. 
 It also includes methods to automatically generate campaigns, which is currently not supported by the official API.
 
 ## Getting Started
