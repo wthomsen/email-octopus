@@ -1,12 +1,12 @@
 # Unofficial EmailOctopus API Wrapper
 
-An unofficial promise-based wrapper for the EmailOctopus API. 
+An unofficial promise-based wrapper for the [EmailOctopus](https://emailoctopus.com/?ali=2c247a50-e9eb-11e6-8561-06ead731d453) API. 
 It also includes methods to automatically generate campaigns, which is currently not supported by the official API.
 
 ## Getting Started
 
 1. `npm install email-octopus`
-2. Include email=octopus as a dependency
+2. Include email-octopus as a dependency
 3. Initialize wrapper using your API Key (optionally include username and password if you want to create campaigns)
 
 ## Example Code
@@ -57,7 +57,8 @@ Create a campaign (warning: unofficially supported by mimicking website flow):
     
 ## Documentation
 
-For full documentation with parameter specs, see the source file or the EmailOctopus API (v1.1) docs.
+For full documentation with parameter specs, see the source file or the EmailOctopus API (v1.1) docs. The `options` 
+parameter always maps to the parameters section for the corresponding endpoint in the official documentation.
 
 ### Lists
 
@@ -78,7 +79,7 @@ For full documentation with parameter specs, see the source file or the EmailOct
 ### Campaigns
 
 * campaigns.get([campaignId], [options])
-* campaigns.create(options, html)
+* campaigns.create(options, html) - Unofficial function that mimics the website flow
 * campaigns.find(campaign) - Helper function to find a campaign given a campaign object (e.g., `{subject: 'My Catchy Subject'}`)
 
 #### Reports
@@ -96,4 +97,19 @@ For full documentation with parameter specs, see the source file or the EmailOct
 * campaigns.reports.notOpened(campaignId, [options])
 * campaigns.reports.notUnsubscribed(campaignId, [options])
 
+## Error Handling
 
+Rejected promises include the entire http request error object. Therefore, you can access the EmailOctopus API error object like this:
+    
+    emailOctopus.lists.contacts
+        .create(listId, existingContact)
+        .catch(function(err) {
+            var eoError = err.error;
+            console.log(eoError.code, eoError.message); 
+            // MEMBER_EXISTS_WITH_EMAIL_ADDRESS A contact already exists with the supplied email address.
+        }); 
+
+## Support The Project
+
+Want to support the project? If you decide to use EmailOctopus, create your account using our 
+[affiliate link](https://emailoctopus.com/?ali=2c247a50-e9eb-11e6-8561-06ead731d453).
