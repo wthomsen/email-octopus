@@ -6,7 +6,7 @@
   },
   "name": "email-octopus",
   "description": "Unofficial API wrapper and campaign automater for Email Octopus.",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "homepage": "http://github.com/wthomsen/email-octopus",
   "license": "MIT",
   "repository": {
