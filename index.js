@@ -54,6 +54,16 @@
       });
     };
 
+    /**
+     * Sends request to EmailOctopus Website
+     * @param {string} path
+     * @param {string} method
+     * @param {Object} [options] - The html form to submit
+     * @param {string} [tokenInputName] - Name of hidden input to retrieve & append before submitting form
+     * @param {Object} [requestOptions] - Custom options to pass to request
+     * @returns {*}
+     * @private
+     */
     EmailOctopus.prototype._websiteRequest = function (path, method, options, tokenInputName, requestOptions) {
       var _this = this;
 
@@ -418,7 +428,6 @@
 
       return _this.master._apiRequest(path, 'DELETE');
     };
-
 
     /**
      * Finds and returns the first matching contact from a given list
