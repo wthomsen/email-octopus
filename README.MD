@@ -11,7 +11,7 @@ It also includes methods to automatically generate campaigns, which is currently
 
 ## Example Code
 
-Setup
+Setup:
 
     var eo = require('email-octopus);
     var apiKey = 'yourKey';
@@ -19,7 +19,7 @@ Setup
     var password = 'password';
     var emailOctopus = new eo.EmailOctopus(apiKey, username, password);
     
-Add a contact to a list
+Add a contact to a list:
 
     var listId = 'some-uuid-for-this-list'
     var options = {
@@ -32,7 +32,7 @@ Add a contact to a list
         console.log('contact added');
     });
     
-Create a campaign (warning: unofficial supported by mimicking website flow)
+Create a campaign (warning: unofficially supported by mimicking website flow):
     
     var campaignOptions = {
       name: 'My First Automated Campaign',
