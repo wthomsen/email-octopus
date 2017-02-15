@@ -112,4 +112,5 @@ Rejected promises include the entire http request error object. Therefore, you c
 ## Support The Project
 
 Want to support the project? If you decide to use EmailOctopus, create your account using our 
-[affiliate link](https://emailoctopus.com/?ali=2c247a50-e9eb-11e6-8561-06ead731d453).
+[affiliate link](https://emailoctopus.com/?ali=2c247a50-e9eb-11e6-8561-06ead731d453). All money generated will be 
+donated to [CodeNow](https://www.codenow.org), a nonprofit helping underrepresented youth learn to code.
