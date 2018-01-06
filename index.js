@@ -318,7 +318,7 @@
      */
     Contacts.prototype.update = function (listId, contactId, options) {
       var _this = this;
-      var path = '/lists/' + listId + '/contacts/' + contactId;
+      var path = '/lists/' + listId + '/members/' + contactId;
 
       return _this.master._apiRequest(path, 'PUT', options);
     };
@@ -331,7 +331,7 @@
      */
     Contacts.prototype['delete'] = function (listId, contactId) {
       var _this = this;
-      var path = '/lists/' + listId + '/contacts' + contactId;
+      var path = '/lists/' + listId + '/members' + contactId;
 
       return _this.master._apiRequest(path, 'DELETE');
     };
